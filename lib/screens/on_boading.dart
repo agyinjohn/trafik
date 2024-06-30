@@ -58,16 +58,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         height: 40,
                       ),
                       CircleAvatar(
-                        radius: size.width * 0.4,
+                        backgroundColor: Colors.lightGreen.withOpacity(0.1),
+                        radius: size.width * 0.35,
                         child: Padding(
                           padding: const EdgeInsets.all(28.0),
                           child: ClipRRect(
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(20)),
                               child: Image.asset(
-                                "assets/images/tf.jpeg",
-                                height: 200,
-                                width: 200,
+                                onboardingData[_currentPage].imagePath,
+                                height: 230,
+                                width: 230,
                               )),
                         ),
                       ),
@@ -98,80 +99,86 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       const SizedBox(
                         height: 50,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(
-                              onboardingData.length,
-                              (index) => _buildDot(index),
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              if (_currentPage > 0)
-                                GestureDetector(
-                                  onTap: () {
-                                    if (_currentPage >= 1) {
-                                      setState(() {
-                                        _currentPage--;
-                                      });
-                                    }
-                                  },
-                                  child: const CircleAvatar(
-                                    radius: 20,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        Icons.arrow_back_ios,
-                                        size: 15,
-                                        color: Colors.lightGreen,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              CircleAvatar(
-                                backgroundColor: Colors.lightGreen,
-                                radius: 20,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      if (_currentPage <
-                                          onboardingData.length - 1) {
-                                        setState(() {
-                                          _currentPage++;
-                                        });
-                                      } else {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const SignUpScreen()));
-                                      }
-                                    },
-                                    child: const Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 15,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
                     ],
                   ),
                 ),
               );
             },
+          ),
+          Positioned(
+            width: 400,
+            bottom: 30,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      onboardingData.length,
+                      (index) => _buildDot(index),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (_currentPage > 0)
+                        GestureDetector(
+                          onTap: () {
+                            if (_currentPage >= 1) {
+                              setState(() {
+                                _currentPage--;
+                              });
+                            }
+                          },
+                          child: const CircleAvatar(
+                            radius: 20,
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Icon(
+                                Icons.arrow_back_ios,
+                                size: 15,
+                                color: Colors.lightGreen,
+                              ),
+                            ),
+                          ),
+                        ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      CircleAvatar(
+                        backgroundColor: Colors.lightGreen,
+                        radius: 20,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              if (_currentPage < onboardingData.length - 1) {
+                                setState(() {
+                                  _currentPage++;
+                                });
+                              } else {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SignUpScreen()));
+                              }
+                            },
+                            child: const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 15,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
           ),
         ],
       ),

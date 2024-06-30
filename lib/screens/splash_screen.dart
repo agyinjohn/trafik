@@ -63,17 +63,21 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:traffic/screens/home_screen.dart';
 
 import 'package:traffic/screens/on_boading.dart';
+import 'package:traffic/utils/providers/auth_provider.dart';
+import 'package:traffic/utils/providers/userprovider.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  ConsumerSplashScreenState createState() => ConsumerSplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class ConsumerSplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
@@ -114,7 +118,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     // Navigate to the next screen after the animation is complete
     Future.delayed(const Duration(seconds: 4), () {
-      Navigator.pushReplacement(context,
+      Navigator.push(context,
           MaterialPageRoute(builder: (context) => const OnboardingScreen()));
     });
   }

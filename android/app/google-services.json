@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "389683386875",
+    "project_id": "trafik-df17f",
+    "storage_bucket": "trafik-df17f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:389683386875:android:34fe17c44028bf992a535e",
+        "android_client_info": {
+          "package_name": "com.example.traffic"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFClsmE7lSO3IFair2O8wELmhXIQq9ftU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
