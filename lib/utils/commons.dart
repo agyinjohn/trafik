@@ -41,3 +41,32 @@ Future<String> uploadProfileToStorage(
   String downLoadUrl = await snapshot.ref.getDownloadURL();
   return downLoadUrl;
 }
+
+void showModalBottomSheetA(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    builder: (context) {
+      return Container(
+        padding: const EdgeInsets.all(16.0),
+        height: 200,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Text('Modal Bottom Sheet',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            const Text(
+                'This is a modal bottom sheet. You can dismiss it by swiping down or tapping outside.'),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
