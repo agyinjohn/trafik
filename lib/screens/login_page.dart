@@ -31,10 +31,9 @@ class ConsumerLoginScreenState extends ConsumerState<LoginScreen>
   late Animation<Offset> _buttonSlideAnimation;
   late Animation<Offset> _textSlideAnimation;
   late Animation<double> _fadeAnimation;
-
-  bool _obscurePassword = true;
-  final bool _obscureConfirmPassword = true;
   bool isLoading = false;
+  bool _obscurePassword = true;
+
   @override
   void initState() {
     super.initState();

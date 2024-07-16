@@ -64,11 +64,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:traffic/screens/home_screen.dart';
 
 import 'package:traffic/screens/on_boading.dart';
-import 'package:traffic/utils/providers/auth_provider.dart';
-import 'package:traffic/utils/providers/userprovider.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});

@@ -6,10 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:traffic/firebase_options.dart';
 import 'package:traffic/screens/home_screen.dart';
-import 'package:traffic/screens/on_boading.dart';
 
 import 'package:traffic/screens/splash_screen.dart';
-import 'package:traffic/utils/providers/auth_provider.dart';
+import 'package:traffic/screens/testinpage.dart';
 
 import 'package:traffic/utils/themes.dart';
 

@@ -50,6 +50,7 @@ class AuthMethods {
     } catch (e) {
       res = false;
       showSnackBar(context, e.toString());
+      print(e.toString());
     }
     return res;
   }

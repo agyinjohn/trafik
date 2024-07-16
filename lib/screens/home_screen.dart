@@ -1,10 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:traffic/screens/alternative_route_page.dart';
+import 'package:traffic/screens/estimated_time_page.dart';
 import 'package:traffic/utils/models/usermodel.dart';
 import 'package:traffic/utils/providers/userprovider.dart';
+import 'package:traffic/widgets/drawer.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -28,6 +32,7 @@ class _ConsumerHomeScreenState extends ConsumerState<HomeScreen> {
     setState(() {
       user = loadedUser;
     });
+    print(user);
   }
 
   late GoogleMapController mapController;
@@ -114,12 +119,14 @@ class _ConsumerHomeScreenState extends ConsumerState<HomeScreen> {
         iconTheme: const IconThemeData(color: Colors.black87),
         backgroundColor: Colors.transparent,
       ),
-      drawer: const Drawer(),
-      body: Stack(
-        children: [
-          currentLocation == null
-              ? const Center(child: CircularProgressIndicator())
-              : GoogleMap(
+      drawer: user != null
+          ? SideDrawer(url: user!.profileUrl, name: user!.name)
+          : null,
+      body: user == null || currentLocation == null
+          ? const Center(child: CircularProgressIndicator())
+          : Stack(
+              children: [
+                GoogleMap(
                   onMapCreated: onMapCreated,
                   initialCameraPosition: CameraPosition(
                     target: LatLng(currentLocation!.latitude!,
@@ -130,8 +137,191 @@ class _ConsumerHomeScreenState extends ConsumerState<HomeScreen> {
                   markers: markers.toSet(),
                   onTap: onTap,
                 ),
-        ],
-      ),
+                DraggableScrollableSheet(
+                  initialChildSize: 0.3,
+                  minChildSize: 0.3,
+                  maxChildSize: 0.6,
+                  builder: (BuildContext context,
+                      ScrollController scrollController) {
+                    return Container(
+                        height: 400,
+                        decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20))),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.lightGreen
+                                              .withOpacity(0.1)),
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: GestureDetector(
+                                              onTap: () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const EstimatedTimePage())),
+                                              child: const Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Icon(
+                                                    Icons.bookmark,
+                                                    color: Colors.lightGreen,
+                                                  ),
+                                                  Text("Estimated \ntime")
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const AlternativeRoutePage())),
+                                      child: Container(
+                                        margin: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.lightGreen
+                                                .withOpacity(0.1)),
+                                        child: const Column(
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Icon(
+                                                    Icons.network_wifi_sharp,
+                                                    color: Colors.lightGreen,
+                                                  ),
+                                                  Text("Alternative \nroutes")
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.lightGreen
+                                              .withOpacity(0.1)),
+                                      child: const Column(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Icon(
+                                                  Icons.mouse,
+                                                  color: Colors.lightGreen,
+                                                ),
+                                                Text("Suitable \ntramsport")
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    const CircleAvatar(
+                                      radius: 30,
+                                      backgroundColor: Colors.lightGreen,
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.directions,
+                                          color: Colors.white,
+                                          size: 30,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.all(12.0),
+                                  child: TextField(
+                                    decoration: InputDecoration(
+                                      hintText: "From",
+                                      prefixIcon: Icon(
+                                        Icons.radio_button_checked,
+                                        color: Colors.grey,
+                                      ),
+                                      suffixIcon: Icon(
+                                        Icons.location_on,
+                                        color: Colors.lightGreen,
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.lightGreen),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.lightGreen),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.all(12.0),
+                                  child: TextField(
+                                    decoration: InputDecoration(
+                                      hintText: "To",
+                                      prefixIcon: Icon(
+                                        Icons.radio_button_off,
+                                        color: Colors.lightGreen,
+                                      ),
+                                      suffixIcon: Icon(
+                                        Icons.location_on,
+                                        color: Colors.lightGreen,
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.lightGreen),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.lightGreen),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ));
+                  },
+                ),
+              ],
+            ),
     );
   }
 }
