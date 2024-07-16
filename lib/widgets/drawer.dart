@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:traffic/screens/about_page.dart';
+import 'package:traffic/screens/display_update.dart';
 import 'package:traffic/screens/hire_agent_page.dart';
 import 'package:traffic/screens/report_page.dart';
 import 'package:traffic/screens/support_page.dart';
@@ -60,7 +61,7 @@ class _SideDrawerState extends State<SideDrawer> {
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const UploadForm())),
+                          builder: (context) => const DisplayPostsPage())),
                   child: const Row(
                     children: [
                       Icon(
@@ -81,7 +82,7 @@ class _SideDrawerState extends State<SideDrawer> {
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ReportPage())),
+                          builder: (context) => const UploadForm())),
                   child: const Row(
                     children: [
                       Icon(
