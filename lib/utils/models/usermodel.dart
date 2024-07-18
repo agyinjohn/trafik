@@ -1,17 +1,20 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
+enum UserRole { admin, agent, user }
 
 class UserModel {
   final String id;
   final String name;
   final String email;
   final String profileUrl;
+  // final UserRole role;
 
   UserModel({
     required this.id,
     required this.name,
     required this.email,
     required this.profileUrl,
+    // required this.role,
   });
 
   Map<String, dynamic> toMap() {
@@ -20,6 +23,7 @@ class UserModel {
       'name': name,
       'email': email,
       'profileUrl': profileUrl,
+      // 'role': role.toString().split('.').last,
     };
   }
 
@@ -29,6 +33,8 @@ class UserModel {
       name: map['name'] as String,
       email: map['email'] as String,
       profileUrl: map['profileUrl'] as String,
+      // role: UserRole.values
+      // .firstWhere((e) => e.toString().split('.').last == map['role']),
     );
   }
 

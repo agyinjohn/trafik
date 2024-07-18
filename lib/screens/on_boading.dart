@@ -145,29 +145,32 @@ class OnboardingScreenState extends State<OnboardingScreen> {
                       const SizedBox(
                         width: 20,
                       ),
-                      CircleAvatar(
-                        backgroundColor: Colors.lightGreen,
-                        radius: 20,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              if (_currentPage < onboardingData.length - 1) {
-                                setState(() {
-                                  _currentPage++;
-                                });
-                              } else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SignUpScreen()));
-                              }
-                            },
-                            child: const Icon(
-                              Icons.arrow_forward_ios,
-                              size: 15,
-                              color: Colors.white,
+                      Padding(
+                        padding: const EdgeInsets.only(right: 50),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.lightGreen,
+                          radius: 20,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                if (_currentPage < onboardingData.length - 1) {
+                                  setState(() {
+                                    _currentPage++;
+                                  });
+                                } else {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const SignUpScreen()));
+                                }
+                              },
+                              child: const Icon(
+                                Icons.arrow_forward_ios,
+                                size: 15,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),

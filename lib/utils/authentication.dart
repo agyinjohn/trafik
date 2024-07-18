@@ -75,6 +75,7 @@ class AuthMethods {
           name: username,
           email: email,
           id: credential.user!.uid,
+          // role: UserRole.user,
           profileUrl: profileUrl);
 
       _firebaseFirestore

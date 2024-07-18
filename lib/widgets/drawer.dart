@@ -1,12 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:traffic/screens/about_page.dart';
 import 'package:traffic/screens/display_update.dart';
 import 'package:traffic/screens/hire_agent_page.dart';
-import 'package:traffic/screens/report_page.dart';
+
 import 'package:traffic/screens/support_page.dart';
-import 'package:traffic/screens/traffic_update.dart';
+
 import 'package:traffic/screens/upload_page.dart';
 
 class SideDrawer extends StatefulWidget {

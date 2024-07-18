@@ -8,7 +8,6 @@ import 'package:traffic/firebase_options.dart';
 import 'package:traffic/screens/home_screen.dart';
 
 import 'package:traffic/screens/splash_screen.dart';
-import 'package:traffic/screens/testinpage.dart';
 
 import 'package:traffic/utils/themes.dart';
 
