@@ -21,8 +21,13 @@ class _CustomButtonState extends State<CustomButton> {
       child: Container(
         width: double.infinity,
         height: 50,
-        decoration: BoxDecoration(color: widget.color),
-        child: Text(widget.txt),
+        decoration: BoxDecoration(
+            color: widget.color, borderRadius: BorderRadius.circular(5)),
+        child: Center(
+            child: Text(
+          widget.txt,
+          style: const TextStyle(color: Colors.white, fontSize: 20),
+        )),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:traffic/screens/about_page.dart';
+import 'package:traffic/screens/become_agent_page.dart';
 import 'package:traffic/screens/display_update.dart';
 import 'package:traffic/screens/hire_agent_page.dart';
 
@@ -168,7 +169,13 @@ class _SideDrawerState extends State<SideDrawer> {
                 color: Colors.lightGreen,
               ),
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const AgentApplicationPage()));
+                  },
                   child: const Text(
                     'Become an agent',
                     style: TextStyle(
