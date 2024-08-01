@@ -24,30 +24,29 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ThemeProvider(
-      initTheme: Themes.darkTheme,
-      builder: (ctx, theme) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          fontFamily: "Montserrat",
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: FutureBuilder(
-            future: checkLoginStatus(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SplashScreen();
-              } else if (snapshot.hasData && snapshot.data == true) {
-                return const HomeScreen();
-              } else if (!snapshot.hasData && snapshot.data == false) {
-                return const SplashScreen();
-              } else {
-                return const SplashScreen();
-              }
-            }),
-      ),
-    );
+        initTheme: Themes.darkTheme,
+        builder: (ctx, theme) => MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Flutter Demo',
+              theme: ThemeData(
+                fontFamily: "Montserrat",
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+                useMaterial3: true,
+              ),
+              home: FutureBuilder(
+                  future: checkLoginStatus(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const SplashScreen();
+                    } else if (snapshot.hasData && snapshot.data == true) {
+                      return const HomePage();
+                    } else if (!snapshot.hasData && snapshot.data == false) {
+                      return const SplashScreen();
+                    } else {
+                      return const SplashScreen();
+                    }
+                  }),
+            ));
   }
 }
 
@@ -55,3 +54,6 @@ Future<bool> checkLoginStatus() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.getBool('isAthenticated') ?? false;
 }
+
+
+//       

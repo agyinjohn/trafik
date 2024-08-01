@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:traffic/screens/home_screen.dart';
+
+import 'package:traffic/screens/mappage.dart';
 import 'package:traffic/screens/sign_up.dart';
 import 'package:traffic/utils/authentication.dart';
 import 'package:traffic/utils/commons.dart';
@@ -137,7 +139,7 @@ class ConsumerLoginScreenState extends ConsumerState<LoginScreen>
             );
         if (res) {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()));
+              MaterialPageRoute(builder: (context) => const HomePage()));
 
           showSnackBar(context, "Login Successfull");
         }

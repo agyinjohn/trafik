@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:traffic/screens/about_page.dart';
+import 'package:traffic/screens/admin_panel.dart';
+import 'package:traffic/screens/approved_agents.dart';
 import 'package:traffic/screens/become_agent_page.dart';
 import 'package:traffic/screens/display_update.dart';
 import 'package:traffic/screens/hire_agent_page.dart';
+import 'package:traffic/screens/profile_page.dart';
 
 import 'package:traffic/screens/support_page.dart';
 
@@ -33,8 +36,14 @@ class _SideDrawerState extends State<SideDrawer> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(widget.url),
+                  GestureDetector(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ProfilePage())),
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(widget.url),
+                    ),
                   ),
                   const SizedBox(
                     width: 10,
@@ -57,6 +66,27 @@ class _SideDrawerState extends State<SideDrawer> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                GestureDetector(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AdminPanel())),
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.notification_add,
+                        color: Colors.lightGreen,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text("Notifications"),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 GestureDetector(
                   onTap: () => Navigator.push(
                       context,
@@ -104,16 +134,22 @@ class _SideDrawerState extends State<SideDrawer> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => const HireAgentPage())),
-                  child: const Row(
+                  child: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.support_agent,
                         color: Colors.lightGreen,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
-                      Text("Hire agent"),
+                      GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ApprovedAgentsPage())),
+                          child: const Text("Hire agent")),
                     ],
                   ),
                 ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:traffic/widgets/custom_button.dart';
 
 class AgentApplicationPage extends StatefulWidget {
@@ -17,36 +17,67 @@ class AgentApplicationPageState extends State<AgentApplicationPage> {
   final TextEditingController _workingHoursController = TextEditingController();
   final TextEditingController _contactController = TextEditingController();
   bool agreeToTerms = false;
+  bool _isLoading = false;
 
-  Future<void> _sendEmail() async {
-    final smtpServer =
-        SmtpServer('smtp.example.com', // Replace with your SMTP server
-            username: 'manuelmills318@gmail.com', // Replace with your email
-            password: 'nanakwame1'); // Replace with your email password
-
-    final message = Message()
-      ..from = const Address('your_email@example.com', 'Your Name')
-      ..recipients.add('admin@example.com') // Replace with admin email
-      ..subject = 'New Agent Application'
-      ..text =
-          'Email: ${_emailController.text}\nLocation: ${_locationController.text}\nWorking Hours: ${_workingHoursController.text}\nContact: ${_contactController.text}';
-
-    try {
-      final sendReport = await send(message, smtpServer);
-      print('Message sent: $sendReport');
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Application submitted successfully!')));
-    } on MailerException catch (e) {
-      print('Message not sent. \n${e.toString()}');
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Failed to submit application. Please try again.')));
-    }
-  }
-
-  void _submitForm() {
+  Future<void> _submitApplication() async {
     if (_formKey.currentState!.validate()) {
       if (agreeToTerms) {
-        _sendEmail();
+        setState(() {
+          _isLoading = true;
+        });
+
+        final User? user = FirebaseAuth.instance.currentUser;
+        if (user == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('You must be logged in to apply.')));
+          setState(() {
+            _isLoading = false;
+          });
+          return;
+        }
+
+        final applicationData = {
+          'uid': user.uid,
+          'email': _emailController.text,
+          'location': _locationController.text,
+          'workingHours': _workingHoursController.text,
+          'contact': _contactController.text,
+          'timestamp': FieldValue.serverTimestamp(),
+          'status':
+              'pending', // Status can be 'pending', 'approved', 'rejected'
+        };
+
+        try {
+          // Add application to 'agentApplications' collection
+          await FirebaseFirestore.instance
+              .collection('agentApplications')
+              .add(applicationData);
+
+          // Add/Update user details with role 'user'
+          await FirebaseFirestore.instance
+              .collection('userDetails')
+              .doc(user.uid)
+              .set(
+                  {
+                'uid': user.uid,
+                'email': user.email,
+                'role': 'user',
+              },
+                  SetOptions(
+                      merge:
+                          true)); // Use merge to update if the document exists
+
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Application submitted successfully!')));
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content:
+                  Text('Failed to submit application. Please try again.')));
+        } finally {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('You must agree to the terms and conditions.')));
@@ -73,9 +104,7 @@ class AgentApplicationPageState extends State<AgentApplicationPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const SizedBox(
-            height: 30,
-          ),
+          const SizedBox(height: 30),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Form(
@@ -85,10 +114,11 @@ class AgentApplicationPageState extends State<AgentApplicationPage> {
                   TextFormField(
                     controller: _emailController,
                     decoration: const InputDecoration(
-                        enabledBorder: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.email),
-                        hintText: "Email"),
+                      enabledBorder: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.email),
+                      hintText: "Email",
+                    ),
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -97,16 +127,15 @@ class AgentApplicationPageState extends State<AgentApplicationPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   TextFormField(
                     controller: _locationController,
                     decoration: const InputDecoration(
-                        enabledBorder: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.location_city_outlined),
-                        hintText: 'City'),
+                      enabledBorder: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.location_city_outlined),
+                      hintText: 'City',
+                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your location';
@@ -114,16 +143,15 @@ class AgentApplicationPageState extends State<AgentApplicationPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   TextFormField(
                     controller: _workingHoursController,
                     decoration: const InputDecoration(
-                        enabledBorder: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.work),
-                        hintText: 'Working Hours'),
+                      enabledBorder: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.work),
+                      hintText: 'Working Hours',
+                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your working hours';
@@ -131,18 +159,15 @@ class AgentApplicationPageState extends State<AgentApplicationPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   TextFormField(
                     controller: _contactController,
                     decoration: const InputDecoration(
-                        enabledBorder: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(),
-                        hintText: 'Contact',
-                        prefixIcon: Icon(
-                          Icons.phone,
-                        )),
+                      enabledBorder: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(),
+                      hintText: 'Contact',
+                      prefixIcon: Icon(Icons.phone),
+                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your contact';
@@ -150,14 +175,12 @@ class AgentApplicationPageState extends State<AgentApplicationPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   CheckboxListTile(
                     checkColor: Colors.white,
                     activeColor: Colors.green,
                     title: const Text(
-                        'I agree to the terms and conditions of Trafik app'),
+                        'I agree to the terms and conditions of the Trafik app'),
                     value: agreeToTerms,
                     onChanged: (value) {
                       setState(() {
@@ -166,10 +189,13 @@ class AgentApplicationPageState extends State<AgentApplicationPage> {
                     },
                   ),
                   const SizedBox(height: 25),
-                  CustomButton(
-                      onPressed: () {},
-                      txt: "Submit Application",
-                      color: Colors.lightGreen)
+                  _isLoading
+                      ? const CircularProgressIndicator()
+                      : CustomButton(
+                          onPressed: _submitApplication,
+                          txt: "Submit Application",
+                          color: Colors.lightGreen,
+                        ),
                 ],
               ),
             ),
