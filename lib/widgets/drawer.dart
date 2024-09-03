@@ -11,6 +11,7 @@ import 'package:traffic/screens/profile_page.dart';
 import 'package:traffic/screens/support_page.dart';
 
 import 'package:traffic/screens/upload_page.dart';
+import 'package:traffic/screens/wheather.dart';
 
 class SideDrawer extends StatefulWidget {
   const SideDrawer({super.key, required this.url, required this.name});
@@ -175,7 +176,28 @@ class _SideDrawerState extends State<SideDrawer> {
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 5,
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const WeatherScreen())),
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.cloud,
+                        color: Colors.lightGreen,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text("Wheather Condition"),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 5,
                 ),
                 GestureDetector(
                   onTap: () => Navigator.push(

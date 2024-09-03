@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:traffic/screens/login_page.dart';
 import 'package:traffic/utils/authentication.dart';
 import 'package:traffic/utils/models/usermodel.dart';
 import 'package:traffic/utils/providers/userprovider.dart';
@@ -22,12 +23,17 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   _logout(BuildContext context) async {
     try {
+      print('Current User: ${FirebaseAuth.instance.currentUser}');
       await FirebaseAuth.instance.signOut();
+      print('User after sign out: ${FirebaseAuth.instance.currentUser}');
+
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       sharedPreferences.remove("user");
       sharedPreferences.setBool("isAuthenticated", false);
-      Navigator.of(context).pushReplacementNamed('/login');
+
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => const LoginScreen()));
     } catch (e) {
       print('Failed to sign out: $e');
     }
@@ -99,7 +105,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ),
               const SizedBox(height: 24),
               CustomButton(
-                  onPressed: _logout(context),
+                  onPressed: () async {
+                    await _logout(context);
+                  },
                   txt: "Logout",
                   color: Colors.lightGreen)
             ],
